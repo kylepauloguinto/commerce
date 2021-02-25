@@ -1,0 +1,70 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <div class="row mx-auto">
+        <div class="col-sm-8 mr-5 mb-3 border">
+            <div class="row">
+                <div class="col my-5">
+                    <img src="{{ item.image }}" alt="{{ item.title }}" style="width: 400px;">
+                </div>
+                <div class="col my-5">
+                    <div class="row mb-3">
+                        <h1>{{ item.title }}</h1>
+                    </div>
+                    <div class="row mb-3">
+                        Current Price: ${{ item.price }}
+                    </div>
+                    <div class="row mb-3">
+                        Starting Price: ${{ item.price }}
+                    </div>
+                    <div class="row mb-3">
+                        {{ item.description }}
+                    </div>
+                    <div class="row mb-3">
+                        {{ item.date }}
+                    </div>
+                    <div class="row mb-3">
+                        {% if user.is_authenticated %}
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">$</span>
+                            </div>
+                            <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" style="width: 200px;">
+                            <div class="input-group-append">
+                                <span class="input-group-text">.00</span>
+                            </div>
+                        {% else %}
+                            Please <a href="login.html">Login</a> to bid
+                        {% endif %}
+                    </div>
+
+                    {% if user.is_authenticated %}
+                        <div class="row">
+                            <input type="submit" value="$ Place Your Bid" class="btn btn-success">
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col border p-0 mb-5">
+            <div class="card-header">
+                    <h2>Add Comment</h2>
+            </div>
+            <div class="card-body">
+                <input type="text" placeholder="Subject" style="width: 380px;" class="mb-2">
+                <textarea placeholder="Your message" style="width: 380px; height:150px;"></textarea>
+                <input type="submit" class="btn btn-primary" value="Save">
+            </div>
+        </div>
+    </div>
+    <div class="row mx-auto">
+        <div class="col border p-0 mb-5">
+            <div class="card-header">
+                <h2>List of comment</h2>
+            </div>
+            <div class="card-body">
+                
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

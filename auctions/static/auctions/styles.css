@@ -1,0 +1,39 @@
+body {
+    padding: 5px;
+}
+
+#container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#container > .list {
+    font-size: 20px;
+    margin-left: 65px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    padding: 20px;
+    width: 400px;
+}
+
+div.item-display {
+    position: relative;
+    width: 360px;
+    height: 350px;
+}
+div.item-display-img {
+    position: relative;
+    width: 354px;
+    height: 237px;
+}
+.caption {
+    display: block;
+}
+  
+.item-bottom {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    width: 335px;
+    height: 100px;
+}
