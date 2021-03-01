@@ -15,6 +15,12 @@
                 <div class="item-bottom">
                     <h1>{{ item.title }}</h1>
                 </div>
+                <div class="item-bottom-right">
+                   <form action="{% url 'item' item.id %}" method="post">
+                        {% csrf_token %}
+                       <input type="submit" value="View" class="btn btn-primary">
+                   </form>
+                </div>
             </div>
         </div>
         {% endfor %}
