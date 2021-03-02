@@ -19,7 +19,7 @@ body {
 div.item-display {
     position: relative;
     width: 360px;
-    height: 350px;
+    height: 600px;
 }
 div.item-display-img {
     position: relative;
@@ -35,7 +35,7 @@ div.item-display-img {
     bottom: 10px;
     left: 10px;
     width: 335px;
-    height: 100px;
+    height: 350px;
 }
 .item-bottom-right {
     position: absolute;
@@ -43,3 +43,6 @@ div.item-display-img {
     right: 15px;
 }
 
+p {
+    margin-bottom: 0px;
+}

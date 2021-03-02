@@ -14,6 +14,10 @@
                 </div>
                 <div class="item-bottom">
                     <h1>{{ item.title }}</h1>
+                    <p>Current price: ${{ item.price }}</p>
+                    <p>Starting price: ${{ item.price }}</p>
+                    <p style="color: grey">Category: {{ item.category }} created by {{ item.name }}</p>
+                    <p>{{ item.description }}</p>
                 </div>
                 <div class="item-bottom-right">
                    <form action="{% url 'item' item.id %}" method="post">
