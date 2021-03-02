@@ -6,6 +6,7 @@ from django.urls import reverse
 
 from .models import User
 from .models import Listing
+from .models import Category
 
 
 def index(request):
@@ -69,4 +70,23 @@ def item(request, item):
     search_item = Listing.objects.get(pk=item)
     return render(request, "auctions/item.html", {
         "item": search_item
+    })
+
+def create(request):
+    if request.method == "POST":
+        listing = Listing()
+        listing.title = request.POST["title"]
+        listing.category_id = request.POST["category"]
+        listing.price = request.POST["price"]
+        listing.description = request.POST["description"]
+        listing.image = request.POST["image"]
+        listing.closeChecker = False
+        listing.name_id = request.user.id
+        listing.save()
+
+        return HttpResponseRedirect(reverse("index"))
+
+    search_item = Category.objects.all()
+    return render(request, "auctions/create.html", {
+        "categories": search_item
     })
