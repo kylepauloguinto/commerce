@@ -40,9 +40,19 @@ div.item-display-img {
 .item-bottom-right {
     position: absolute;
     bottom: 10px;
-    right: 15px;
+    /*right: 15px;*/
 }
 
 p {
     margin-bottom: 0px;
+}
+#form1 {
+    position: relative;
+    bottom: 10px;
+    left: 10px;
+}
+#form2 {
+    position: absolute;
+    bottom: 10px;
+    left: 80px;
 }

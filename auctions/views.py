@@ -10,6 +10,23 @@ from .models import Category
 
 
 def index(request):
+    if request.method == "POST":
+        if request.user.id != None:
+            item = request.POST["item_id"]
+            search_item = Listing(pk=item)
+            if_exist = True
+            try:
+                search_user_id = search_item.user.get(id=request.user.id)
+            except:
+                if_exist = False
+
+            if if_exist:
+                search_item.user.remove(request.user.id)
+            else:
+                search_item.user.add(request.user.id)
+        else:
+            return render(request, "auctions/login.html")
+
     return render(request, "auctions/index.html", {
         "list": Listing.objects.all
     })
@@ -70,6 +87,23 @@ def item(request, item):
     search_item = Listing.objects.get(pk=item)
     return render(request, "auctions/item.html", {
         "item": search_item
+    })
+
+def watchlist(request):
+    if request.method == "POST":
+        item = request.POST["item_id"]
+        search_item = Listing(pk=item)
+        search_item.user.remove(request.user.id)
+
+
+    search_item = Listing.objects.filter(user__id=request.user.id)
+    return render(request, "auctions/watchlist.html", {
+        "list": search_item
+    })
+def listing(request):
+    search_item = Listing.objects.filter(name__id=request.user.id)
+    return render(request, "auctions/listing.html", {
+        "list": search_item
     })
 
 def create(request):
