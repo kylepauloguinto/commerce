@@ -28,7 +28,17 @@
                    <form action="{% url 'index' %}" method="post" id="form2">
                         {% csrf_token %}
                         <input type="text" value="{{ item.id }}" name="item_id" hidden>
-                        <input type="submit" value="Add Watchlist" class="btn btn-primary">
+                        {% if item.user.all|length == 0 %}
+                            <input type="submit" value="Add Watchlist" class="btn btn-primary">
+                        {% else %}
+                            {% for i in item.user.all %}
+                                {% if user.username == i.username %}
+                                    <input type="submit" value="Remove Watchlist" class="btn btn-secondary">
+                                {% else %}
+                                    <input type="submit" value="Add Watchlist" class="btn btn-primary">
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
                     </form>
                     {% endif %}
                 </div>

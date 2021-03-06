@@ -27,7 +27,7 @@
                    <form action="{% url 'watchlist' %}" method="post" id="form2">
                         {% csrf_token %}
                         <input type="text" value="{{ item.id }}" name="item_id" hidden>
-                        <input type="submit" value="Add Watchlist" class="btn btn-primary">
+                        <input type="submit" value="Remove Watchlist" class="btn btn-secondary">
                    </form>
                 </div>
             </div>
