@@ -16,7 +16,12 @@
                     <h1>{{ item.title }}</h1>
                     <p>Current price: ${{ item.price }}</p>
                     <p>Starting price: ${{ item.price }}</p>
-                    <p style="color: grey">Category: {{ item.category }} created by {{ item.name }}</p>
+                    <p style="color: grey">Category: {{ item.category }} created by 
+                        {% if user.id != item.name.id %} 
+                            {{ item.name }} 
+                        {% else %} 
+                            You 
+                        {% endif %}</p>
                     <p>{{ item.description }}</p>
                 </div>
                 <div class="item-bottom-right">
@@ -39,6 +44,12 @@
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
+                    </form>
+                    {% else %}
+                    <form action="#" method="post" id="form2">
+                        {% csrf_token %}
+                        <input type="text" value="{{ item.id }}" name="item_id" hidden>
+                        <input type="submit" value="Close Bid" class="btn btn-warning">
                     </form>
                     {% endif %}
                 </div>

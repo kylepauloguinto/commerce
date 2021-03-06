@@ -12,6 +12,33 @@
                         <h1>{{ item.title }}</h1>
                     </div>
                     <div class="row mb-3">
+                        {% if user.id != item.name.id %}
+                            <form action="{% url 'index' %}" method="post" >
+                                {% csrf_token %}
+                                <input type="text" value="{{ item.id }}" name="item_id" hidden>
+                                {% if user.is_authenticated %}
+                                    {% if item.user.all|length == 0 %}
+                                        <input type="submit" value="Add Watchlist" class="btn btn-primary">
+                                    {% else %}
+                                        {% for i in item.user.all %}
+                                            {% if user.username == i.username %}
+                                                <input type="submit" value="Remove Watchlist" class="btn btn-secondary">
+                                            {% else %}
+                                                <input type="submit" value="Add Watchlist" class="btn btn-primary">
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endif %}
+                            </form>
+                        {% else %}
+                            <form action="#" method="post" >
+                                {% csrf_token %}
+                                <input type="text" value="{{ item.id }}" name="item_id" hidden>
+                                <input type="submit" value="Close Bid" class="btn btn-warning">
+                            </form>
+                        {% endif %}
+                    </div>
+                    <div class="row mb-3">
                         Current Price: ${{ item.price }}
                     </div>
                     <div class="row mb-3">
