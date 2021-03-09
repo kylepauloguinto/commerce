@@ -9,7 +9,7 @@ class Category(models.Model):
 
     def __str__(self):
         return f"{self.title}"
- 
+
 class Listing(models.Model):
     title = models.CharField(max_length=64)
     description = models.TextField(blank=True)
@@ -21,4 +21,7 @@ class Listing(models.Model):
     date = models.DateTimeField(auto_now_add=True, blank=True)
     user = models.ManyToManyField(User, blank=True, related_name="watched_list")
 
-
+class Bids(models.Model):
+    listingId = models.IntegerField()
+    amount = models.IntegerField()
+    bidder = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bidder")

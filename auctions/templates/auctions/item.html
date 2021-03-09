@@ -39,7 +39,7 @@
                         {% endif %}
                     </div>
                     <div class="row mb-3">
-                        Current Price: ${{ item.price }}
+                        Current Price: ${{ bidAmount }}
                     </div>
                     <div class="row mb-3">
                         Starting Price: ${{ item.price }}
@@ -50,25 +50,29 @@
                     <div class="row mb-3">
                         {{ item.date }}
                     </div>
-                    <div class="row mb-3">
-                        {% if user.is_authenticated %}
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">$</span>
-                            </div>
-                            <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" style="width: 200px;" value="0">
-                            <div class="input-group-append">
-                                <span class="input-group-text">.00</span>
-                            </div>
-                        {% else %}
-                            Please <a href="login.html">Login</a> to bid
-                        {% endif %}
-                    </div>
 
-                    {% if user.is_authenticated %}
-                        <div class="row">
-                            <input type="submit" value="$ Place Your Bid" class="btn btn-success">
+                    <form action="{% url 'item' item.id %}" method="post" >
+                        {% csrf_token %}
+                        <div class="row mb-3">
+                            {% if user.is_authenticated %}
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">$</span>
+                                </div>
+                                <input type="text" name="price" class="form-control" aria-label="Amount (to the nearest dollar)" style="width: 200px;" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">.00</span>
+                                </div>
+                            {% else %}
+                                Please <a href="login.html">Login</a> to bid
+                            {% endif %}
                         </div>
-                    {% endif %}
+
+                        {% if user.is_authenticated %}
+                            <div class="row">
+                                <input type="submit" value="$ Place Your Bid" class="btn btn-success">
+                            </div>
+                        {% endif %}
+                    </form>
                 </div>
             </div>
         </div>

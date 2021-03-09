@@ -7,6 +7,7 @@ from django.urls import reverse
 from .models import User
 from .models import Listing
 from .models import Category
+from .models import Bids
 
 
 def index(request):
@@ -84,9 +85,24 @@ def register(request):
         return render(request, "auctions/register.html")
 
 def item(request, item):
+    if request.method == "POST":
+        if request.POST["price"] != "none":
+            bids = Bids()
+            bids.listingId = item
+            bids.amount = request.POST["price"]
+            bids.bidder_id = request.user.id
+            bids.save()
+
+    getBid = Bids.objects.filter(listingId=item).order_by("-amount").first()
     search_item = Listing.objects.get(pk=item)
+
+    if getBid == None:
+        getBid = search_item.price
+    else:
+        getBid = getBid.amount
     return render(request, "auctions/item.html", {
-        "item": search_item
+        "item": search_item,
+        "bidAmount": getBid
     })
 
 def watchlist(request):
