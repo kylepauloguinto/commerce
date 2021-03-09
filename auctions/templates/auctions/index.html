@@ -14,7 +14,9 @@
                 </div>
                 <div class="item-bottom">
                     <h1>{{ item.title }}</h1>
-                    <p>Current price: ${{ item.price }}</p>
+                    {% with item.listingId.all|first as current %}
+                        <p>Current price: ${{ current.amount }}</p>
+                    {% endwith %}
                     <p>Starting price: ${{ item.price }}</p>
                     <p style="color: grey">Category: {{ item.category }} created by 
                         {% if user.id != item.name.id %} 

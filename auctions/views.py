@@ -27,7 +27,7 @@ def index(request):
                 search_item.user.add(request.user.id)
         else:
             return render(request, "auctions/login.html")
-
+    
     return render(request, "auctions/index.html", {
         "list": Listing.objects.all
     })
@@ -88,12 +88,12 @@ def item(request, item):
     if request.method == "POST":
         if request.POST["price"] != "none":
             bids = Bids()
-            bids.listingId = item
+            bids.listingId_id = item
             bids.amount = request.POST["price"]
             bids.bidder_id = request.user.id
             bids.save()
 
-    getBid = Bids.objects.filter(listingId=item).order_by("-amount").first()
+    getBid = Bids.objects.filter(listingId=item).first()
     search_item = Listing.objects.get(pk=item)
 
     if getBid == None:

@@ -21,7 +21,15 @@ class Listing(models.Model):
     date = models.DateTimeField(auto_now_add=True, blank=True)
     user = models.ManyToManyField(User, blank=True, related_name="watched_list")
 
+    def __str__(self):
+        return f"{self.listingId}"
+
 class Bids(models.Model):
-    listingId = models.IntegerField()
+    listingId = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="listingId")
     amount = models.IntegerField()
     bidder = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bidder")
+    date = models.DateTimeField(auto_now_add=True, blank=True)
+
+    class Meta:
+        ordering = ['-amount']
+
