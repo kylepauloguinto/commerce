@@ -22,7 +22,7 @@ class Listing(models.Model):
     user = models.ManyToManyField(User, blank=True, related_name="watched_list")
 
     def __str__(self):
-        return f"{self.listingId}"
+        return f"{self.id}"
 
 class Bids(models.Model):
     listingId = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="listingId")
@@ -33,3 +33,12 @@ class Bids(models.Model):
     class Meta:
         ordering = ['-amount']
 
+class Comments(models.Model):
+    commentListingId = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="commentListingId")
+    commentUser = models.ForeignKey(User, on_delete=models.CASCADE, related_name="commentUser")
+    commentTitle = models.CharField(max_length=64)
+    commentDescription = models.TextField(blank=True)
+    date = models.DateTimeField(auto_now_add=True, blank=True)
+
+    class Meta:
+        ordering = ['-date']

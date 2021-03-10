@@ -8,6 +8,7 @@ from .models import User
 from .models import Listing
 from .models import Category
 from .models import Bids
+from .models import Comments
 
 
 def index(request):
@@ -86,23 +87,34 @@ def register(request):
 
 def item(request, item):
     if request.method == "POST":
-        if request.POST["price"] != "none":
+        if request.POST.get("placeBid"):
             bids = Bids()
             bids.listingId_id = item
             bids.amount = request.POST["price"]
             bids.bidder_id = request.user.id
             bids.save()
+        elif request.POST.get("comment"):
+            comment = Comments()
+            comment.commentListingId_id = item
+            comment.commentTitle = request.POST["commentTitle"]
+            comment.commentDescription = request.POST["commentDescription"]
+            comment.commentUser_id = request.user.id
+            comment.save()
+
 
     getBid = Bids.objects.filter(listingId=item).first()
     search_item = Listing.objects.get(pk=item)
+    commentList = Comments.objects.filter(commentListingId=item)
 
     if getBid == None:
         getBid = search_item.price
     else:
         getBid = getBid.amount
+
     return render(request, "auctions/item.html", {
         "item": search_item,
-        "bidAmount": getBid
+        "bidAmount": getBid,
+        "commentList": commentList
     })
 
 def watchlist(request):

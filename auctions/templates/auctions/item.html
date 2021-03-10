@@ -63,7 +63,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <input type="submit" value="$ Place Your Bid" class="btn btn-success">
+                                <input name="placeBid" type="submit" value="$ Place Your Bid" class="btn btn-success">
                             </div>
                         </form>
                     {% elif user.id != item.name.id %}
@@ -78,11 +78,16 @@
             <div class="card-header">
                     <h2>Add Comment</h2>
             </div>
+            {% if user.is_authenticated and user.id != item.name.id %}
             <div class="card-body">
-                <input type="text" placeholder="Subject" style="width: 380px;" class="mb-2">
-                <textarea placeholder="Your message" style="width: 380px; height:150px;"></textarea>
-                <input type="submit" class="btn btn-primary" value="Save">
+                <form action="{% url 'item' item.id %}" method="post" >
+                    {% csrf_token %}
+                    <input type="text" name="commentTitle" placeholder="Subject" style="width: 380px;" class="mb-2">
+                    <textarea name="commentDescription" placeholder="Your message" style="width: 380px; height:150px;"></textarea>
+                    <input type="submit" name="comment" class="btn btn-primary" value="Save">
+                </form>
             </div>
+            {% endif %}
         </div>
     </div>
     <div class="row mx-auto">
@@ -91,7 +96,14 @@
                 <h2>List of comment</h2>
             </div>
             <div class="card-body">
-                
+                {% for comment in commentList %}
+                    <div class="row mb-3">
+                    {{ comment.commentUser}}
+                    {{ comment.commentTitle }}
+                    {{ comment.commentDescription }}
+                    {{ comment.date }}
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>
