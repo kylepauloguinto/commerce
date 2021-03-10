@@ -12,25 +12,31 @@ from .models import Comments
 
 
 def index(request):
+    user_watch = None
     if request.method == "POST":
         if request.user.id != None:
             item = request.POST["item_id"]
-            search_item = Listing(pk=item)
+            search_user_id = User.objects.get(id=request.user.id)
+
             if_exist = True
             try:
-                search_user_id = search_item.user.get(id=request.user.id)
+                search_item = search_user_id.watchlist.get(id=item)
             except:
                 if_exist = False
 
             if if_exist:
-                search_item.user.remove(request.user.id)
+                search_user_id.watchlist.remove(item)
             else:
-                search_item.user.add(request.user.id)
+                search_user_id.watchlist.add(item)
         else:
             return render(request, "auctions/login.html")
-    
+
+    if request.user.is_authenticated:
+        user_watch = User.objects.get(pk=int(request.user.id)).watchlist.all()
+
     return render(request, "auctions/index.html", {
-        "list": Listing.objects.all
+        "list": Listing.objects.all,
+        "watchlist": user_watch
     })
 
 
@@ -86,6 +92,7 @@ def register(request):
         return render(request, "auctions/register.html")
 
 def item(request, item):
+    user_watch = None
     if request.method == "POST":
         if request.POST.get("placeBid"):
             bids = Bids()
@@ -106,6 +113,9 @@ def item(request, item):
     search_item = Listing.objects.get(pk=item)
     commentList = Comments.objects.filter(commentListingId=item)
 
+    if request.user.is_authenticated:
+        user_watch = User.objects.get(pk=int(request.user.id)).watchlist.all()
+
     if getBid == None:
         getBid = search_item.price
     else:
@@ -114,17 +124,18 @@ def item(request, item):
     return render(request, "auctions/item.html", {
         "item": search_item,
         "bidAmount": getBid,
-        "commentList": commentList
+        "commentList": commentList,
+        "watchlist": user_watch
     })
 
 def watchlist(request):
     if request.method == "POST":
         item = request.POST["item_id"]
-        search_item = Listing(pk=item)
-        search_item.user.remove(request.user.id)
+        search_user_id = User.objects.get(id=request.user.id)
+        search_user_id.watchlist.remove(item)
 
 
-    search_item = Listing.objects.filter(user__id=request.user.id)
+    search_item = Listing.objects.filter(user_watch=request.user.id)
     return render(request, "auctions/watchlist.html", {
         "list": search_item
     })

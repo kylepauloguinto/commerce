@@ -16,18 +16,10 @@
                             <form action="{% url 'index' %}" method="post" >
                                 {% csrf_token %}
                                 <input type="text" value="{{ item.id }}" name="item_id" hidden>
-                                {% if user.is_authenticated %}
-                                    {% if item.user.all|length == 0 %}
-                                        <input type="submit" value="Add Watchlist" class="btn btn-primary">
-                                    {% else %}
-                                        {% for i in item.user.all %}
-                                            {% if user.username == i.username %}
-                                                <input type="submit" value="Remove Watchlist" class="btn btn-secondary">
-                                            {% else %}
-                                                <input type="submit" value="Add Watchlist" class="btn btn-primary">
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% endif %}
+                                {% if item in watchlist %}
+                                    <input type="submit" value="Remove Watchlist" class="btn btn-secondary">
+                                {% else %}
+                                    <input type="submit" value="Add Watchlist" class="btn btn-primary">
                                 {% endif %}
                             </form>
                         {% else %}
@@ -78,7 +70,7 @@
             <div class="card-header">
                     <h2>Add Comment</h2>
             </div>
-            {% if user.is_authenticated and user.id != item.name.id %}
+            {% if user.is_authenticated %}
             <div class="card-body">
                 <form action="{% url 'item' item.id %}" method="post" >
                     {% csrf_token %}

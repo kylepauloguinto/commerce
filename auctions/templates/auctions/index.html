@@ -15,7 +15,11 @@
                 <div class="item-bottom">
                     <h1>{{ item.title }}</h1>
                     {% with item.listingId.all|first as current %}
-                        <p>Current price: ${{ current.amount }}</p>
+                        {% if current.amount == None %}
+                            <p>Current price: ${{ item.price }}</p>
+                        {% else %}
+                            <p>Current price: ${{ current.amount }}</p>
+                        {% endif %}
                     {% endwith %}
                     <p>Starting price: ${{ item.price }}</p>
                     <p style="color: grey">Category: {{ item.category }} created by 
@@ -36,16 +40,10 @@
                    <form action="{% url 'index' %}" method="post" id="form2">
                         {% csrf_token %}
                         <input type="text" value="{{ item.id }}" name="item_id" hidden>
-                        {% if item.user.all|length == 0 %}
-                            <input type="submit" value="Add Watchlist" class="btn btn-primary">
+                        {% if item in watchlist %}
+                            <input type="submit" value="Remove Watchlist" class="btn btn-secondary">
                         {% else %}
-                            {% for i in item.user.all %}
-                                {% if user.username == i.username %}
-                                    <input type="submit" value="Remove Watchlist" class="btn btn-secondary">
-                                {% else %}
-                                    <input type="submit" value="Add Watchlist" class="btn btn-primary">
-                                {% endif %}
-                            {% endfor %}
+                            <input type="submit" value="Add Watchlist" class="btn btn-primary">
                         {% endif %}
                     </form>
                     {% else %}
