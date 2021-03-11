@@ -23,11 +23,15 @@
                                 {% endif %}
                             </form>
                         {% else %}
-                            <form action="#" method="post" >
-                                {% csrf_token %}
-                                <input type="text" value="{{ item.id }}" name="item_id" hidden>
-                                <input type="submit" value="Close Bid" class="btn btn-warning">
-                            </form>
+                            {% if not item.closeChecker %}
+                                <form action="{% url 'index' %}" method="post" >
+                                    {% csrf_token %}
+                                    <input type="text" value="{{ item.id }}" name="item_id" hidden>
+                                    <input type="submit" name="closeBid" value="Close Bid" class="btn btn-warning">
+                                </form>
+                            {% else %}
+                                <input type="submit" name="closeBid" value="Close Bid" class="btn btn-warning" disabled>
+                            {% endif %}
                         {% endif %}
                     </div>
                     <div class="row mb-3">

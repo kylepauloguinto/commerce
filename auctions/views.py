@@ -15,19 +15,25 @@ def index(request):
     user_watch = None
     if request.method == "POST":
         if request.user.id != None:
-            item = request.POST["item_id"]
-            search_user_id = User.objects.get(id=request.user.id)
+            if request.POST.get("removeWatchlist") or request.POST.get("addWatchlist") : 
+                item = request.POST["item_id"]
+                search_user_id = User.objects.get(id=request.user.id)
 
-            if_exist = True
-            try:
-                search_item = search_user_id.watchlist.get(id=item)
-            except:
-                if_exist = False
+                if_exist = True
+                try:
+                    search_item = search_user_id.watchlist.get(id=item)
+                except:
+                    if_exist = False
 
-            if if_exist:
-                search_user_id.watchlist.remove(item)
-            else:
-                search_user_id.watchlist.add(item)
+                if if_exist:
+                    search_user_id.watchlist.remove(item)
+                else:
+                    search_user_id.watchlist.add(item)
+            elif request.POST.get("closeBid"):
+                item = request.POST["item_id"]
+                search_item = Listing.objects.get(pk=item)
+                search_item.closeChecker = True
+                search_item.save()
         else:
             return render(request, "auctions/login.html")
 
@@ -39,6 +45,39 @@ def index(request):
         "watchlist": user_watch
     })
 
+def allList(request):
+    user_watch = None
+    if request.method == "POST":
+        if request.user.id != None:
+            if request.POST.get("removeWatchlist") or request.POST.get("addWatchlist") : 
+                item = request.POST["item_id"]
+                search_user_id = User.objects.get(id=request.user.id)
+
+                if_exist = True
+                try:
+                    search_item = search_user_id.watchlist.get(id=item)
+                except:
+                    if_exist = False
+
+                if if_exist:
+                    search_user_id.watchlist.remove(item)
+                else:
+                    search_user_id.watchlist.add(item)
+            elif request.POST.get("closeBid"):
+                item = request.POST["item_id"]
+                search_item = Listing.objects.get(pk=item)
+                search_item.closeChecker = True
+                search_item.save()
+        else:
+            return render(request, "auctions/login.html")
+
+    if request.user.is_authenticated:
+        user_watch = User.objects.get(pk=int(request.user.id)).watchlist.all()
+
+    return render(request, "auctions/allList.html", {
+        "list": Listing.objects.all,
+        "watchlist": user_watch
+    })
 
 def login_view(request):
     if request.method == "POST":

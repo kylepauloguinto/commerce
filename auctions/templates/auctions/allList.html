@@ -5,7 +5,6 @@
 
     <div class="row" id="container">
     {% for item in list %}
-        {% if not item.closeChecker %}
         <div class="list border">
             <div class="item-display">
                 <div class="item-display-img">
@@ -38,7 +37,7 @@
                        <input type="submit" value="View" class="btn btn-primary">
                    </form>
                    {% if user.id != item.name.id %}
-                   <form action="{% url 'index' %}" method="post" id="form2">
+                   <form action="{% url 'allList' %}" method="post" id="form2">
                         {% csrf_token %}
                         <input type="text" value="{{ item.id }}" name="item_id" hidden>
                         {% if item in watchlist %}
@@ -49,7 +48,7 @@
                     </form>
                     {% else %}
                         {% if not item.closeChecker %}
-                            <form action="{% url 'index' %}" method="post" id="form2">
+                            <form action="{% url 'allList' %}" method="post" id="form2">
                                 {% csrf_token %}
                                 <input type="text" value="{{ item.id }}" name="item_id" hidden>
                                 <input type="submit" name="closeBid" value="Close Bid" class="btn btn-warning">
@@ -63,7 +62,6 @@
                 </div>
             </div>
         </div>
-        {% endif %}
     {% endfor %}
     </div>
       
