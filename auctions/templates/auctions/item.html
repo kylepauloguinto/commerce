@@ -6,14 +6,20 @@
         <strong>You won on bidding!</strong>
     </div>
     {% endif %}
-    {% if errorMessage != None %}
+    {% if message != None %}
         <div class="row">
             <div class="col-4" >
             </div>
             <div class="col-4" >
-                <div class="alert alert-danger" role="alert">
-                    <strong>{{ errorMessage }}</strong>
-                </div>
+                {% if message.messageCode != '1001' %}
+                    <div class="alert alert-success" role="alert">
+                        <strong>{{ message.message }}</strong>
+                    </div>
+                {% else %}
+                    <div class="alert alert-success" role="alert">
+                        <strong>{{ message.message }}</strong>
+                    </div>
+                {% endif %}
             </div>
             <div class="col-4" >
             </div>

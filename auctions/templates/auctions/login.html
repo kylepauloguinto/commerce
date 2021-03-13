@@ -3,14 +3,23 @@
 {% block body %}
 
     {% if message %}
-        <div>{{ message }}</div>
+        <<div class="row">
+            <div class="col-4" >
+            </div>
+            <div class="col-4" >
+                <div class="alert alert-success" role="alert">
+                    <strong>{{ message }}</strong>
+                </div>
+            </div>
+            <div class="col-4" >
+            </div>
+        </div>
     {% endif %}
     <div class="row">
         <div class="col-4" >
         </div>
         <div class="col-4" >
             <center><h2>Login</h2></center>
-        
             <form action="{% url 'login' %}" method="post">
                 {% csrf_token %}
                 <div class="form-group">

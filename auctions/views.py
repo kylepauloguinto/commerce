@@ -134,7 +134,7 @@ def register(request):
 
 def item(request, item):
     user_watch = None
-    error = None
+    message = None
     if request.method == "POST":
         if request.POST.get("placeBid"):
             bidAmount = request.POST["price"]
@@ -142,17 +142,18 @@ def item(request, item):
             search_item = Listing.objects.get(pk=item)
             if getBid == None:
                 if int(bidAmount) <= search_item.price :
-                    error = "Invalid input bid."
+                    message = {"messageCode": "1001", "message": "Invalid input bid."}
             elif int(bidAmount) <=search_item.price :
-                error = "Invalid input bid."
+                message = {"messageCode": "1001", "message": "Invalid input bid."}
                 
-            if error == None :
+            if message == None :
                 bids = Bids()
                 bids.listingId_id = item
                 bids.amount = bidAmount
                 bids.bidder_id = request.user.id
                 bids.save()
-                
+                message = {"messageCode": "2001", "message": "Successfully add bid."}
+
         elif request.POST.get("comment"):
             comment = Comments()
             comment.commentListingId_id = item
@@ -171,13 +172,13 @@ def item(request, item):
 
     if getBid == None:
         getBid = None   
-    
+
     return render(request, "auctions/item.html", {
         "item": search_item,
         "bid": getBid,
         "commentList": commentList,
         "watchlist": user_watch,
-        "errorMessage": error
+        "message": message
     })
 
 def watchlist(request):
