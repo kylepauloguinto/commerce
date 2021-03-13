@@ -134,13 +134,25 @@ def register(request):
 
 def item(request, item):
     user_watch = None
+    error = None
     if request.method == "POST":
         if request.POST.get("placeBid"):
-            bids = Bids()
-            bids.listingId_id = item
-            bids.amount = request.POST["price"]
-            bids.bidder_id = request.user.id
-            bids.save()
+            bidAmount = request.POST["price"]
+            getBid = Bids.objects.filter(listingId=item).first()
+            search_item = Listing.objects.get(pk=item)
+            if getBid == None:
+                if int(bidAmount) <= search_item.price :
+                    error = "Invalid input bid."
+            elif int(bidAmount) <=search_item.price :
+                error = "Invalid input bid."
+                
+            if error == None :
+                bids = Bids()
+                bids.listingId_id = item
+                bids.amount = bidAmount
+                bids.bidder_id = request.user.id
+                bids.save()
+                
         elif request.POST.get("comment"):
             comment = Comments()
             comment.commentListingId_id = item
@@ -158,15 +170,14 @@ def item(request, item):
         user_watch = User.objects.get(pk=int(request.user.id)).watchlist.all()
 
     if getBid == None:
-        getBid = search_item.price
-    else:
-        getBid = getBid.amount
-
+        getBid = None   
+    
     return render(request, "auctions/item.html", {
         "item": search_item,
-        "bidAmount": getBid,
+        "bid": getBid,
         "commentList": commentList,
-        "watchlist": user_watch
+        "watchlist": user_watch,
+        "errorMessage": error
     })
 
 def watchlist(request):

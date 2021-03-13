@@ -1,6 +1,24 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+    {% if item.closeChecker == True and user.id == bid.bidder.id %}
+    <div class="alert alert-warning" role="alert">
+        <strong>You won on bidding!</strong>
+    </div>
+    {% endif %}
+    {% if errorMessage != None %}
+        <div class="row">
+            <div class="col-4" >
+            </div>
+            <div class="col-4" >
+                <div class="alert alert-danger" role="alert">
+                    <strong>{{ errorMessage }}</strong>
+                </div>
+            </div>
+            <div class="col-4" >
+            </div>
+        </div>
+    {% endif %}
     <div class="row mx-auto">
         <div class="col-sm-8 mr-5 mb-3 border">
             <div class="row itm">
@@ -12,7 +30,7 @@
                         <h1>{{ item.title }}</h1>
                     </div>
                     <div class="row mb-3">
-                        {% if user.id != item.name.id %}
+                        {% if user.id != item.name.id and not item.closeChecker %}
                             <form action="{% url 'index' %}" method="post" >
                                 {% csrf_token %}
                                 <input type="text" value="{{ item.id }}" name="item_id" hidden>
@@ -35,7 +53,11 @@
                         {% endif %}
                     </div>
                     <div class="row mb-3">
-                        Current Price: ${{ bidAmount }}
+                        {% if bid %}
+                            Current Price: ${{ bid.amount }} by {{ bid.bidder }}
+                        {% else %}
+                            Current Price:&nbsp;<strong>No bid</strong>
+                        {% endif %}
                     </div>
                     <div class="row mb-3">
                         Starting Price: ${{ item.price }}
@@ -46,7 +68,7 @@
                     <div class="row mb-3">
                         {{ item.date }}
                     </div>
-                    {% if user.is_authenticated and user.id != item.name.id %}
+                    {% if user.is_authenticated and user.id != item.name.id and not item.closeChecker %}
                         <form action="{% url 'item' item.id %}" method="post" >
                             {% csrf_token %}
                             <div class="row mb-3">
@@ -62,7 +84,7 @@
                                 <input name="placeBid" type="submit" value="$ Place Your Bid" class="btn btn-success">
                             </div>
                         </form>
-                    {% elif user.id != item.name.id %}
+                    {% elif not user.is_authenticated and user.id != item.name.id %}
                         <div class="row mb-3">
                             Please&nbsp;<a href="{% url 'login' %}">Login</a>&nbsp;to bid
                         </div>
@@ -70,21 +92,23 @@
                 </div>
             </div>
         </div>
-        <div class="col border p-0 mb-5">
-            <div class="card-header">
-                    <h2>Add Comment</h2>
+        {% if not item.closeChecker %}
+            <div class="col border p-0 mb-5">
+                <div class="card-header">
+                        <h2>Add Comment</h2>
+                </div>
+                {% if user.is_authenticated %}
+                <div class="card-body">
+                    <form action="{% url 'item' item.id %}" method="post" >
+                        {% csrf_token %}
+                        <input type="text" name="commentTitle" placeholder="Subject" style="width: 380px;" class="mb-2">
+                        <textarea name="commentDescription" placeholder="Your message" style="width: 380px; height:150px;"></textarea>
+                        <input type="submit" name="comment" class="btn btn-primary" value="Save">
+                    </form>
+                </div>
+                {% endif %}
             </div>
-            {% if user.is_authenticated %}
-            <div class="card-body">
-                <form action="{% url 'item' item.id %}" method="post" >
-                    {% csrf_token %}
-                    <input type="text" name="commentTitle" placeholder="Subject" style="width: 380px;" class="mb-2">
-                    <textarea name="commentDescription" placeholder="Your message" style="width: 380px; height:150px;"></textarea>
-                    <input type="submit" name="comment" class="btn btn-primary" value="Save">
-                </form>
-            </div>
-            {% endif %}
-        </div>
+        {% endif %}
     </div>
     <div class="row mx-auto">
         <div class="col border p-0 mb-5">
