@@ -120,6 +120,8 @@ def register(request):
         # Attempt to create new user
         try:
             user = User.objects.create_user(username, email, password)
+            user.first_name = request.POST["firstname"]
+            user.last_name = request.POST["lastname"]
             user.save()
         except IntegrityError:
             return render(request, "auctions/register.html", {
@@ -200,5 +202,18 @@ def create(request):
 
     search_item = Category.objects.all()
     return render(request, "auctions/create.html", {
+        "categories": search_item
+    })
+
+def category(request):
+    if request.method == "POST":
+        category = Category()
+        category.title = request.POST["category"]
+        category.save()
+
+        return HttpResponseRedirect(reverse("index"))
+
+    search_item = Category.objects.all()
+    return render(request, "auctions/category.html", {
         "categories": search_item
     })

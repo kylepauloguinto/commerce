@@ -3,9 +3,10 @@
 {% block body %}
 <div class="container">
     <div class="row">
-        <div class="col">
+        <div class="col-3">
         </div>
         <div class="col-6">
+            <center><h2>Add Item</h2></center>
             <form action="{% url 'create' %}" method="post">
                 {% csrf_token %}
                 <div class="form-group">
@@ -44,7 +45,7 @@
                 <input type="submit" value="Submit" class="btn btn-primary">
             </form>
         </div>
-        <div class="col">
+        <div class="col-3">
         </div>
     </div>
 </div>

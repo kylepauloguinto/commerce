@@ -3,7 +3,7 @@
 {% block body %}
     <div class="row mx-auto">
         <div class="col-sm-8 mr-5 mb-3 border">
-            <div class="row">
+            <div class="row itm">
                 <div class="col my-5">
                     <img src="{{ item.image }}" alt="{{ item.title }}" style="width: 400px;">
                 </div>
@@ -64,7 +64,7 @@
                         </form>
                     {% elif user.id != item.name.id %}
                         <div class="row mb-3">
-                            Please <a href="{% url 'login' %}">Login</a> to bid
+                            Please&nbsp;<a href="{% url 'login' %}">Login</a>&nbsp;to bid
                         </div>
                     {% endif %}
                 </div>
@@ -89,16 +89,30 @@
     <div class="row mx-auto">
         <div class="col border p-0 mb-5">
             <div class="card-header">
-                <h2>List of comment</h2>
+                <h2>List of comment - {{ commentList|length }} comment(s)</h2>
             </div>
             <div class="card-body">
                 {% for comment in commentList %}
-                    <div class="row mb-3">
-                    {{ comment.commentUser}}
-                    {{ comment.commentTitle }}
-                    {{ comment.commentDescription }}
-                    {{ comment.date }}
+                <div class="row mx-auto">
+                    <div class="ct">
+                        <span class="ctb">>>&nbsp;&nbsp;</span>
                     </div>
+                    <div class="col-11 border borderradius p-0 mb-5">
+                        <div class="card-header">
+                            <span class="ctb">
+                                {{ comment.commentUser.first_name}}
+                                {{ comment.commentUser.last_name}}
+                            </span>
+                            <span class="cd">
+                                commented on {{ comment.date }}
+                            </span>
+                        </div>
+                        <div class="card-body">
+                        <h6>{{ comment.commentTitle }}</h6>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;{{ comment.commentDescription }}</p>
+                        </div>
+                    </div>
+                </div>
                 {% endfor %}
             </div>
         </div>
