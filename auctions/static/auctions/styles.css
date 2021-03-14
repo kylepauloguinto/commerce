@@ -57,6 +57,11 @@ p {
     bottom: 10px;
     left: 80px;
 }
+#form3 {
+    position: absolute;
+    bottom: 10px;
+    left: 245px;
+}
 .ct {
     margin-top: .7rem! important;
 }

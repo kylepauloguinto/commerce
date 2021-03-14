@@ -3,7 +3,7 @@
 {% block body %}
     {% if item.closeChecker == True and user.id == bid.bidder.id %}
     <div class="alert alert-warning" role="alert">
-        <strong>You won on bidding!</strong>
+        <center><strong>You won on bidding!</strong></center>
     </div>
     {% endif %}
     {% if message != None %}
