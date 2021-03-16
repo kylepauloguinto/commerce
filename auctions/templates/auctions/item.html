@@ -58,26 +58,26 @@
                             {% endif %}
                         {% endif %}
                     </div>
-                    <div class="row mb-3">
+                    <div class="row mb-3 mr-3">
                         {% if bid %}
                             Current Price: ${{ bid.amount }} by {{ bid.bidder }}
                         {% else %}
                             Current Price:&nbsp;<strong>No bid</strong>
                         {% endif %}
                     </div>
-                    <div class="row mb-3">
+                    <div class="row mb-3 mr-3">
                         Starting Price: ${{ item.price }}
                     </div>
-                    <div class="row mb-3">
+                    <div class="row mb-3 mr-3">
                         {{ item.description }}
                     </div>
-                    <div class="row mb-3">
+                    <div class="row mb-3 mr-3">
                         {{ item.date }}
                     </div>
                     {% if user.is_authenticated and user.id != item.name.id and not item.closeChecker %}
                         <form action="{% url 'item' item.id %}" method="post" >
                             {% csrf_token %}
-                            <div class="row mb-3">
+                            <div class="row mb-3 mr-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">$</span>
                                 </div>
@@ -91,7 +91,7 @@
                             </div>
                         </form>
                     {% elif not user.is_authenticated and user.id != item.name.id %}
-                        <div class="row mb-3">
+                        <div class="row mb-3 mr-3">
                             Please&nbsp;<a href="{% url 'login' %}">Login</a>&nbsp;to bid
                         </div>
                     {% endif %}
