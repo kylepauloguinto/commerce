@@ -31,10 +31,21 @@
                     <p>{{ item.description }}</p>
                 </div>
                 <div class="item-bottom-right">
-                   <form action="{% url 'item' item.id %}" method="post" >
+                    <form action="{% url 'item' item.id %}" method="post" id="form1">
                         {% csrf_token %}
-                       <input type="submit" value="View" class="btn btn-primary">
-                   </form>
+                        <input type="submit" value="View" class="btn btn-primary">
+                    </form>
+                    {% if not item.closeChecker %}
+                            <form action="{% url 'index' %}" method="post" id="form2">
+                                {% csrf_token %}
+                                <input type="text" value="{{ item.id }}" name="item_id" hidden>
+                                <input type="submit" name="closeBid" value="Close Bid" class="btn btn-warning">
+                            </form>
+                    {% else %}
+                            <div id="form2">
+                                <input type="submit" name="closeBid" value="Closed Bid" class="btn btn-warning" disabled>
+                            </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
