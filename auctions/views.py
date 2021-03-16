@@ -3,6 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django import forms
 
 from .models import User
 from .models import Listing
@@ -15,7 +16,7 @@ import re
 def index(request):
     user_watch = None
     if request.method == "POST":
-        if request.user.id != None:
+        if request.user.is_authenticated:
             if request.POST.get("removeWatchlist") or request.POST.get("addWatchlist") : 
                 item = request.POST["item_id"]
                 search_user_id = User.objects.get(id=request.user.id)
@@ -137,32 +138,35 @@ def item(request, item):
     user_watch = None
     message = None
     if request.method == "POST":
-        if request.POST.get("placeBid"):
-            bidAmount = request.POST["price"]
-            getBid = Bids.objects.filter(listingId=item).first()
-            search_item = Listing.objects.get(pk=item)
-            if getBid == None:
-                if int(bidAmount) <= search_item.price :
-                    message = {"messageCode": "1001", "message": "Invalid input bid."}
-            elif int(bidAmount) <=search_item.price :
-                message = {"messageCode": "1001", "message": "Invalid input bid."}
+        if request.user.is_authenticated:
+            if request.POST.get("placeBid"):
+                bidAmount = request.POST["price"]
+                getBid = Bids.objects.filter(listingId=item).first()
+                search_item = Listing.objects.get(pk=item)
                 
-            if message == None :
-                bids = Bids()
-                bids.listingId_id = item
-                bids.amount = bidAmount
-                bids.bidder_id = request.user.id
-                bids.save()
-                message = {"messageCode": "2001", "message": "Successfully add bid."}
+                if getBid == None:
+                    if int(bidAmount) <= search_item.price :
+                        message = {"messageCode": "1001", "message": "Invalid input bid."}
+                elif int(bidAmount) <= getBid.amount :
+                    message = {"messageCode": "1001", "message": "Invalid input bid."}
 
-        elif request.POST.get("comment"):
-            comment = Comments()
-            comment.commentListingId_id = item
-            comment.commentTitle = request.POST["commentTitle"]
-            comment.commentDescription = request.POST["commentDescription"]
-            comment.commentUser_id = request.user.id
-            comment.save()
+                if message == None :
+                    bids = Bids()
+                    bids.listingId_id = item
+                    bids.amount = bidAmount
+                    bids.bidder_id = request.user.id
+                    bids.save()
+                    message = {"messageCode": "2001", "message": "Successfully add bid."}
 
+            elif request.POST.get("comment"):
+                comment = Comments()
+                comment.commentListingId_id = item
+                comment.commentTitle = request.POST["commentTitle"]
+                comment.commentDescription = request.POST["commentDescription"]
+                comment.commentUser_id = request.user.id
+                comment.save()
+        else:
+            return render(request, "auctions/login.html")
 
     getBid = Bids.objects.filter(listingId=item).first()
     search_item = Listing.objects.get(pk=item)
@@ -188,7 +192,6 @@ def watchlist(request):
         search_user_id = User.objects.get(id=request.user.id)
         search_user_id.watchlist.remove(item)
 
-
     search_item = Listing.objects.filter(user_watch=request.user.id)
     return render(request, "auctions/watchlist.html", {
         "list": search_item
@@ -199,57 +202,81 @@ def listing(request):
         "list": search_item
     })
 
+class NewTaskForm(forms.Form):
+    category = forms.IntegerField(label="Category ID")
+
 def create(request):
     messageList = []
-    
+    title = ""
+    category = ""
+    price = 0
+    description = ""
+    img = ""
+
     if request.method == "POST":
-        error = False
-        title = request.POST["title"]
-        price = request.POST["price"]
-        description = request.POST["description"]
+        if request.user.is_authenticated:
+            error = False
+            form = NewTaskForm(request.POST)
+            title = request.POST["title"]
+            price = request.POST["price"]
+            description = request.POST["description"]
+            img = request.POST["image"]
 
-        if title == "" or title == None:
-            messageList.append("Please input title.")
-            error = True
-        elif len(title) > 64:
-            messageList.append("Please input title maximum of 64 characters.")
-            error = True
+            if form.is_valid():
+                category = form.cleaned_data["category"]
 
-        if re.findall("[a-zA-Z]", price):
-            messageList.append("Please input numeric value.")
-            error = True
-        elif int(price) == 0 :
-            messageList.append("Please input amount more than 0.")
-            error = True
-        elif int(price) > 9999999:
-            messageList.append("Please input amount less than $9,999,999.")
-            error = True
+            if title == "" or title == None:
+                messageList.append("Please input title.")
+                error = True
+            elif len(title) > 64:
+                messageList.append("Please input title maximum of 64 characters.")
+                error = True
 
-        if description == "" or description == None:
-            messageList.append("Please input description.")
-            error = True
-        elif len(description) > 900:
-            messageList.append("Please input description maximum of 900 characters.")
-            error = True
+            if price == "" or price == None:
+                messageList.append("Please input amount.")
+                error = True
+            elif re.findall("[a-zA-Z]", price):
+                messageList.append("Please input numeric value.")
+                error = True
+            elif int(price) == 0 :
+                messageList.append("Please input amount more than 0.")
+                error = True
+            elif int(price) > 9999999:
+                messageList.append("Please input amount less than $9,999,999.")
+                error = True
+
+            if description == "" or description == None:
+                messageList.append("Please input description.")
+                error = True
+            elif len(description) > 900:
+                messageList.append("Please input description maximum of 900 characters.")
+                error = True
 
 
-        #if not error:
-        #    listing = Listing()
-        #    listing.title = title
-        #    listing.category_id = request.POST["category"]
-        #    listing.price = price
-        #    listing.description = request.POST["description"]
-        #    listing.image = request.POST["image"]
-        #    listing.closeChecker = False
-        #    listing.name_id = request.user.id
-        #    listing.save()
-        if not error:
-            return HttpResponseRedirect(reverse("index"))
+            if not error:
+                listing = Listing()
+                listing.title = title
+                listing.category_id = category
+                listing.price = price
+                listing.description = description
+                listing.image = img
+                listing.closeChecker = False
+                listing.name_id = request.user.id
+                listing.save()
+
+                return HttpResponseRedirect(reverse("index"))
+        else:
+            return render(request, "auctions/login.html")
 
     search_item = Category.objects.all()
     return render(request, "auctions/create.html", {
         "categories": search_item,
-        "message": messageList
+        "message": messageList,
+        "title": title,
+        "ctgry": category,
+        "price": price,
+        "description": description,
+        "img": img
     })
 
 def category(request):
