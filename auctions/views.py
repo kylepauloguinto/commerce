@@ -9,6 +9,7 @@ from .models import Listing
 from .models import Category
 from .models import Bids
 from .models import Comments
+import re
 
 
 def index(request):
@@ -199,22 +200,56 @@ def listing(request):
     })
 
 def create(request):
+    messageList = []
+    
     if request.method == "POST":
-        listing = Listing()
-        listing.title = request.POST["title"]
-        listing.category_id = request.POST["category"]
-        listing.price = request.POST["price"]
-        listing.description = request.POST["description"]
-        listing.image = request.POST["image"]
-        listing.closeChecker = False
-        listing.name_id = request.user.id
-        listing.save()
+        error = False
+        title = request.POST["title"]
+        price = request.POST["price"]
+        description = request.POST["description"]
 
-        return HttpResponseRedirect(reverse("index"))
+        if title == "" or title == None:
+            messageList.append("Please input title.")
+            error = True
+        elif len(title) > 64:
+            messageList.append("Please input title maximum of 64 characters.")
+            error = True
+
+        if re.findall("[a-zA-Z]", price):
+            messageList.append("Please input numeric value.")
+            error = True
+        elif int(price) == 0 :
+            messageList.append("Please input amount more than 0.")
+            error = True
+        elif int(price) > 9999999:
+            messageList.append("Please input amount less than $9,999,999.")
+            error = True
+
+        if description == "" or description == None:
+            messageList.append("Please input description.")
+            error = True
+        elif len(description) > 900:
+            messageList.append("Please input description maximum of 900 characters.")
+            error = True
+
+
+        #if not error:
+        #    listing = Listing()
+        #    listing.title = title
+        #    listing.category_id = request.POST["category"]
+        #    listing.price = price
+        #    listing.description = request.POST["description"]
+        #    listing.image = request.POST["image"]
+        #    listing.closeChecker = False
+        #    listing.name_id = request.user.id
+        #    listing.save()
+        if not error:
+            return HttpResponseRedirect(reverse("index"))
 
     search_item = Category.objects.all()
     return render(request, "auctions/create.html", {
-        "categories": search_item
+        "categories": search_item,
+        "message": messageList
     })
 
 def category(request):
