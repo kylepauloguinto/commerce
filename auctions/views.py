@@ -107,23 +107,52 @@ def logout_view(request):
 
 
 def register(request):
+    messageList = []
     if request.method == "POST":
+        error = False
         username = request.POST["username"]
         email = request.POST["email"]
 
         # Ensure password matches confirmation
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
+        firstname = request.POST["firstname"]
+        lastname = request.POST["lastname"]
+
+        if username == "" or username == None:
+            messageList.append("Please input username.")
+            error = True
+
+        if firstname == "" or firstname == None:
+            messageList.append("Please input firstname.")
+            error = True
+
+        if lastname == "" or lastname == None:
+            messageList.append("Please input lastname.")
+            error = True
+
+        if password == "" or password == None:
+            messageList.append("Please input password.")
+            error = True
+
         if password != confirmation:
+            messageList.append("Passwords must match.")
+            error = True
+
+        if error:
             return render(request, "auctions/register.html", {
-                "message": "Passwords must match."
+                "username" : username,
+                "firstname": firstname,
+                "email": email,
+                "lastname": lastname,
+                "message": messageList
             })
 
         # Attempt to create new user
         try:
             user = User.objects.create_user(username, email, password)
-            user.first_name = request.POST["firstname"]
-            user.last_name = request.POST["lastname"]
+            user.first_name = firstname
+            user.last_name = lastname
             user.save()
         except IntegrityError:
             return render(request, "auctions/register.html", {
@@ -157,9 +186,9 @@ def item(request, item):
                     message = {"messageCode": "1001", "message": "Please input amount less than ¥9,999,999."}
                 elif getBid == None:
                     if int(bidAmount) <= search_item.price :
-                        message = {"messageCode": "1001", "message": "Invalid input bid."}
+                        message = {"messageCode": "1001", "message": "Please input amount more than starting price."}
                 elif int(bidAmount) <= getBid.amount :
-                    message = {"messageCode": "1001", "message": "Invalid input bid."}
+                    message = {"messageCode": "1001", "message": "Please input amount more than current price."}
 
                 if message == None :
                     bids = Bids()

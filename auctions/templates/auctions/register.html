@@ -4,7 +4,23 @@
 
 
     {% if message %}
-        <div>{{ message }}</div>
+    <div class="row">
+        <div class="col-4" >
+        </div>
+        <div class="col-4" >
+            <div class="alert alert-success" role="alert">
+                <ul>
+                    {% for msg in message %}
+                        <li>
+                            <p>{{ msg }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="col-4" >
+        </div>
+    </div>
     {% endif %}
     <div class="row">
         <div class="col-4" >
@@ -14,16 +30,16 @@
             <form action="{% url 'register' %}" method="post">
                 {% csrf_token %}
                 <div class="form-group">
-                    <input class="form-control" autofocus type="text" name="username" placeholder="Username">
+                    <input class="form-control" autofocus type="text" name="username" placeholder="Username" value="{{ username }}">
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="email" name="email" placeholder="Email Address">
+                    <input class="form-control" type="email" name="email" placeholder="Email Address" value="{{ email }}">
                 </div>
                 <div class="form-group">
-                    <input class="form-control" autofocus type="text" name="firstname" placeholder="First Name">
+                    <input class="form-control" autofocus type="text" name="firstname" placeholder="First Name" value="{{ firstname }}">
                 </div>
                 <div class="form-group">
-                    <input class="form-control" autofocus type="text" name="lastname" placeholder="Last Name">
+                    <input class="form-control" autofocus type="text" name="lastname" placeholder="Last Name" value="{{ lastname }}">
                 </div>
                 <div class="form-group">
                     <input class="form-control" type="password" name="password" placeholder="Password">
