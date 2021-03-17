@@ -19,10 +19,10 @@
                         {% if current.amount == None %}
                             <p>Current price: &nbsp;<strong>No bid</strong></p>
                         {% else %}
-                            <p>Current price: ${{ current.amount }} by {{ current.bidder }}</p>
+                            <p>Current price: ¥{{ current.amount }} by {{ current.bidder }}</p>
                         {% endif %}
                     {% endwith %}
-                    <p>Starting price: ${{ item.price }}</p>
+                    <p>Starting price: ¥{{ item.price }}</p>
                     <p style="color: grey">Category: {{ item.category }} created by 
                         {% if user.id != item.name.id %} 
                             {{ item.name }} 

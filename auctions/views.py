@@ -137,6 +137,7 @@ def register(request):
 def item(request, item):
     user_watch = None
     message = None
+    bidAmount = 0
     if request.method == "POST":
         if request.user.is_authenticated:
             if request.POST.get("placeBid"):
@@ -144,7 +145,17 @@ def item(request, item):
                 getBid = Bids.objects.filter(listingId=item).first()
                 search_item = Listing.objects.get(pk=item)
                 
-                if getBid == None:
+                if bidAmount == "" or bidAmount == None:
+                    message = {"messageCode": "1001", "message": "Please input amount."}
+                elif re.findall("\W", bidAmount):
+                    message = {"messageCode": "1001", "message": "Please input correct numeric value."}
+                elif re.findall("[a-zA-Z]", bidAmount):
+                    message = {"messageCode": "1001", "message": "Please input numeric value."}
+                elif int(bidAmount) == 0 :
+                    message = {"messageCode": "1001", "message": "Please input amount more than 0."}
+                elif int(bidAmount) > 9999999:
+                    message = {"messageCode": "1001", "message": "Please input amount less than ¥9,999,999."}
+                elif getBid == None:
                     if int(bidAmount) <= search_item.price :
                         message = {"messageCode": "1001", "message": "Invalid input bid."}
                 elif int(bidAmount) <= getBid.amount :
@@ -183,7 +194,8 @@ def item(request, item):
         "bid": getBid,
         "commentList": commentList,
         "watchlist": user_watch,
-        "message": message
+        "message": message,
+        "bidAmount": bidAmount
     })
 
 def watchlist(request):
@@ -235,6 +247,9 @@ def create(request):
             if price == "" or price == None:
                 messageList.append("Please input amount.")
                 error = True
+            elif re.findall("\W", price):
+                messageList.append("Please input correct numeric value.")
+                error = True
             elif re.findall("[a-zA-Z]", price):
                 messageList.append("Please input numeric value.")
                 error = True
@@ -242,7 +257,7 @@ def create(request):
                 messageList.append("Please input amount more than 0.")
                 error = True
             elif int(price) > 9999999:
-                messageList.append("Please input amount less than $9,999,999.")
+                messageList.append("Please input amount less than ¥9,999,999.")
                 error = True
 
             if description == "" or description == None:
