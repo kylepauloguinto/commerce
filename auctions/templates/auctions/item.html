@@ -6,7 +6,7 @@
         <center><strong>You won on bidding!</strong></center>
     </div>
     {% endif %}
-    {% if message != None %}
+    {% if message %}
         <div class="row">
             <div class="col-4" >
             </div>
@@ -31,7 +31,7 @@
                     </div>
                     <div class="row mb-3">
                         {% if user.id != item.name.id and not item.closeChecker %}
-                            <form action="{% url 'index' %}" method="post" >
+                            <form action="{% url 'item' item.id %}" method="post" >
                                 {% csrf_token %}
                                 <input type="text" value="{{ item.id }}" name="item_id" hidden>
                                 {% if item in watchlist %}
@@ -42,7 +42,7 @@
                             </form>
                         {% else %}
                             {% if not item.closeChecker %}
-                                <form action="{% url 'index' %}" method="post" >
+                                <form action="{% url 'item' item.id %}" method="post" >
                                     {% csrf_token %}
                                     <input type="text" value="{{ item.id }}" name="item_id" hidden>
                                     <input type="submit" name="closeBid" value="Close Bid" class="btn btn-warning">
@@ -66,7 +66,7 @@
                         {{ item.description }}
                     </div>
                     <div class="row mb-3 mr-3">
-                        {{ item.date }}
+                        {{ item.date }} created by {{ item.name }}
                     </div>
                     {% if user.is_authenticated and user.id != item.name.id and not item.closeChecker %}
                         <form action="{% url 'item' item.id %}" method="post" >
