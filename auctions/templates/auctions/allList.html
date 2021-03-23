@@ -57,7 +57,7 @@
                    <form action="{% url 'item' item.id %}" method="post" id="form1">
                         {% csrf_token %}
                         <input type="text" value="none" name="price" hidden>
-                       <input type="submit" value="View" class="btn btn-primary">
+                       <input type="submit" value="View" name="view" class="btn btn-primary">
                    </form>
                    {% if user.id != item.name.id and not item.closeChecker %}
                    <form action="{% url 'allList' %}" method="post" id="form2">

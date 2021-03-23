@@ -244,7 +244,8 @@ def item(request, item):
                 comment.commentUser_id = request.user.id
                 comment.save()
         else:
-            return render(request, "auctions/login.html")
+            if not request.POST.get("view"):
+                return render(request, "auctions/login.html")
 
     getBid = Bids.objects.filter(listingId=item).first()
     search_item = Listing.objects.get(pk=item)
