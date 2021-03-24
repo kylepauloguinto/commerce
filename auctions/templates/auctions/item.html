@@ -1,7 +1,7 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    {% if item.closeChecker == True and user.id == bid.bidder.id %}
+    {% if item.closeChecker == True and user.is_authenticated and user.id == bid.bidder.id %}
     <div class="alert alert-warning" role="alert">
         <center><strong>You won on bidding!</strong></center>
     </div>
@@ -54,9 +54,19 @@
                     </div>
                     <div class="row mb-3 mr-3">
                         {% if bid %}
-                            Current Price: ¥{{ bid.amount }} by {{ bid.bidder }}
+                            {% if not item.closeChecker %}
+                                Current 
+                            {% else %}
+                                Final
+                            {% endif %}   
+                            Price: ¥{{ bid.amount }} by {{ bid.bidder }}
                         {% else %}
-                            Current Price:&nbsp;<strong>No bid</strong>
+                            {% if not item.closeChecker %}
+                                Current 
+                            {% else %}
+                                Final
+                            {% endif %}   
+                            Price:&nbsp;<strong>No bid</strong>
                         {% endif %}
                     </div>
                     <div class="row mb-3 mr-3">

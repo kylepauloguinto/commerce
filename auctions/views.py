@@ -22,6 +22,8 @@ def index(request):
         if form.is_valid():
             category = form.cleaned_data["category"]
             listing = Listing.objects.filter(category=category)
+        #else:
+        #    listing = Listing.objects.filter(category__isnull=True) 
 
         if request.user.is_authenticated:
             if request.POST.get("removeWatchlist") or request.POST.get("addWatchlist") : 

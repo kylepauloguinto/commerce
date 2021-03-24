@@ -16,9 +16,19 @@
                     <h1>{{ item.title }}</h1>
                     {% with item.listingId.all|first as current %}
                         {% if current.amount == None %}
-                            <p>Current price: &nbsp;<strong>No bid</strong></p>
+                            <p>{% if not item.closeChecker %}
+                                    Current 
+                                {% else %}
+                                    Final
+                                {% endif %}   
+                                price: &nbsp;<strong>No bid</strong></p>
                         {% else %}
-                            <p>Current price: ¥{{ current.amount }} by 
+                            <p>{% if not item.closeChecker %}
+                                    Current 
+                                {% else %}
+                                    Final
+                                {% endif %}   
+                                price: ¥{{ current.amount }} by 
                                 {% if user.id != current.bidder.id %} 
                                     {{ current.bidder }}
                                 {% else %} 
