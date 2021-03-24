@@ -16,7 +16,7 @@ class Listing(models.Model):
     title = models.CharField(max_length=64)
     description = models.TextField(blank=True)
     image = models.TextField(blank=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE,blank=True, related_name="category")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True, related_name="category")
     name = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")
     price = models.IntegerField()
     closeChecker = models.BooleanField()

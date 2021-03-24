@@ -22,8 +22,9 @@ def index(request):
         if form.is_valid():
             category = form.cleaned_data["category"]
             listing = Listing.objects.filter(category=category)
-        #else:
-        #    listing = Listing.objects.filter(category__isnull=True) 
+        elif request.POST.get("category") == "null":
+            category = request.POST.get("category")
+            listing = Listing.objects.filter(category__isnull=True) 
 
         if request.user.is_authenticated:
             if request.POST.get("removeWatchlist") or request.POST.get("addWatchlist") : 
@@ -70,7 +71,10 @@ def allList(request):
         if form.is_valid():
             category = form.cleaned_data["category"]
             listing = Listing.objects.filter(category=category)
-
+        elif request.POST.get("category") == "null":
+            category = request.POST.get("category")
+            listing = Listing.objects.filter(category__isnull=True) 
+            
         if request.user.is_authenticated:
             if request.POST.get("removeWatchlist") or request.POST.get("addWatchlist") : 
                 item = request.POST["item_id"]

@@ -8,6 +8,11 @@
             <div class="form-group mx-sm-3 ">
                 <select name="category" class="custom-select offset-md-9" id="category">
                     <option value="" >All category</option>
+                    {% if ctgry == 'null' %}
+                        <option selected value="null" >No category</option>
+                    {% else %}
+                        <option value="null" >No category</option>
+                    {% endif %}
                     {% for category in categories %}
                         {% if ctgry == category.id %}
                             <option selected value="{{ category.id }}" >{{ category }}</option>
