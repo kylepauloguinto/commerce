@@ -28,7 +28,13 @@
                                 {% else %}
                                     Final
                                 {% endif %}   
-                                price: ¥{{ current.amount }} by {{ current.bidder }}</p>
+                                price: ¥{{ current.amount }} by 
+                                {% if user.id != current.bidder.id %} 
+                                    {{ current.bidder }}
+                                {% else %} 
+                                    You 
+                                {% endif %}
+                            </p>
                         {% endif %}
                     {% endwith %}
                     <p>Starting price: ¥{{ item.price }}</p>

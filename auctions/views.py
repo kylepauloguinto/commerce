@@ -249,6 +249,10 @@ def item(request, item):
                 comment.commentDescription = request.POST["commentDescription"]
                 comment.commentUser_id = request.user.id
                 comment.save()
+            elif request.POST.get("closeBid"):
+                search_item = Listing.objects.get(pk=item)
+                search_item.closeChecker = True
+                search_item.save()
         else:
             if not request.POST.get("view"):
                 return render(request, "auctions/login.html")

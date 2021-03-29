@@ -59,7 +59,12 @@
                             {% else %}
                                 Final
                             {% endif %}   
-                            Price: ¥{{ bid.amount }} by {{ bid.bidder }}
+                            Price: ¥{{ bid.amount }} by 
+                                {% if user.id != bid.bidder.id %} 
+                                    {{ bid.bidder }}
+                                {% else %} 
+                                    You 
+                                {% endif %}
                         {% else %}
                             {% if not item.closeChecker %}
                                 Current 
