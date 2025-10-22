@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django import forms
+from django.core.paginator import Paginator
 
 from .models import User
 from .models import Listing
@@ -12,60 +13,23 @@ from .models import Bids
 from .models import Comments
 import re
 
-
 def index(request):
-    user_watch = None
-    category = ""
-    listing = Listing.objects.all
-    if request.method == "POST":
-        form = NewTaskForm(request.POST)
-        if form.is_valid():
-            category = form.cleaned_data["category"]
-            listing = Listing.objects.filter(category=category)
-        elif request.POST.get("category") == "null":
-            category = request.POST.get("category")
-            listing = Listing.objects.filter(category__isnull=True) 
-
-        if request.user.is_authenticated:
-            if request.POST.get("removeWatchlist") or request.POST.get("addWatchlist") : 
-                item = request.POST["item_id"]
-                search_user_id = User.objects.get(id=request.user.id)
-
-                if_exist = True
-                try:
-                    search_item = search_user_id.watchlist.get(id=item)
-                except:
-                    if_exist = False
-
-                if if_exist:
-                    search_user_id.watchlist.remove(item)
-                else:
-                    search_user_id.watchlist.add(item)
-                    
-            elif request.POST.get("closeBid"):
-                item = request.POST["item_id"]
-                search_item = Listing.objects.get(pk=item)
-                search_item.closeChecker = True
-                search_item.save()
-        else:
-            if not request.POST.get("search"):
-                return render(request, "auctions/login.html")
-
-    if request.user.is_authenticated:
-        user_watch = User.objects.get(pk=int(request.user.id)).watchlist.all()
-    
-    search_item = Category.objects.all()
-    return render(request, "auctions/index.html", {
-        "list": listing,
-        "watchlist": user_watch,
-        "categories": search_item,
-        "ctgry": category
-    })
+    return display(request, "index", 1)
 
 def allList(request):
+    return display(request, "allList", 1)
+
+def display(request, screen, pageNo):
+
+    if screen == "index":
+        path = "auctions/index.html"
+    elif screen == "allList":
+        path = "auctions/allList.html"
+
     user_watch = None
     category = ""
-    listing = Listing.objects.all
+    listing = Listing.objects.all()
+
     if request.method == "POST":
         form = NewTaskForm(request.POST)
         if form.is_valid():
@@ -73,8 +37,11 @@ def allList(request):
             listing = Listing.objects.filter(category=category)
         elif request.POST.get("category") == "null":
             category = request.POST.get("category")
-            listing = Listing.objects.filter(category__isnull=True) 
-            
+            listing = Listing.objects.filter(category__isnull=True)
+        else:
+            # Default case to prevent crash
+            listing = Listing.objects.all()
+
         if request.user.is_authenticated:
             if request.POST.get("removeWatchlist") or request.POST.get("addWatchlist") : 
                 item = request.POST["item_id"]
@@ -90,6 +57,7 @@ def allList(request):
                     search_user_id.watchlist.remove(item)
                 else:
                     search_user_id.watchlist.add(item)
+
             elif request.POST.get("closeBid"):
                 item = request.POST["item_id"]
                 search_item = Listing.objects.get(pk=item)
@@ -103,7 +71,11 @@ def allList(request):
         user_watch = User.objects.get(pk=int(request.user.id)).watchlist.all()
 
     search_item = Category.objects.all()
-    return render(request, "auctions/allList.html", {
+
+    paginator = Paginator(listing,10)
+    listing = paginator.page(pageNo).object_list
+
+    return render(request, path, {
         "list": listing,
         "watchlist": user_watch,
         "categories": search_item,
@@ -129,11 +101,9 @@ def login_view(request):
     else:
         return render(request, "auctions/login.html")
 
-
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
-
 
 def register(request):
     messageList = []
@@ -286,6 +256,7 @@ def watchlist(request):
     return render(request, "auctions/watchlist.html", {
         "list": search_item
     })
+
 def listing(request):
     search_item = Listing.objects.filter(name__id=request.user.id)
     return render(request, "auctions/listing.html", {

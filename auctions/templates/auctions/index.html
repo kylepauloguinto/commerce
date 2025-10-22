@@ -2,27 +2,31 @@
 
 {% block body %}
     <h2>&nbsp;&nbsp;Active Listings</h2>
-    <div class="">
-        <form action="{% url 'index' %}" method="post" class="form-inline offset-md-9">
+    <div class="searchSection">
+        <form action="{% url 'index' %}" method="post" class="form-inline">
             {% csrf_token %}
-            <div class="form-group mx-sm-3 ">
-                <select name="category" class="custom-select offset-md-9" id="category">
-                    <option value="" >All category</option>
-                    {% if ctgry == 'null' %}
-                        <option selected value="null" >No category</option>
-                    {% else %}
-                        <option value="null" >No category</option>
-                    {% endif %}
-                    {% for category in categories %}
-                        {% if ctgry == category.id %}
-                            <option selected value="{{ category.id }}" >{{ category }}</option>
+            <div class="row">
+                <div class="form-group mx-sm-3 select">
+                    <select name="category" class="custom-select" id="category">
+                        <option value="" >All category</option>
+                        {% if ctgry == 'null' %}
+                            <option selected value="null" >No category</option>
                         {% else %}
-                            <option value="{{ category.id }}" >{{ category }}</option>
+                            <option value="null" >No category</option>
                         {% endif %}
-                    {% endfor %}    
-                </select>
+                        {% for category in categories %}
+                            {% if ctgry == category.id %}
+                                <option selected value="{{ category.id }}" >{{ category }}</option>
+                            {% else %}
+                                <option value="{{ category.id }}" >{{ category }}</option>
+                            {% endif %}
+                        {% endfor %}    
+                    </select>
+                </div>
+                <div>
+                    <input type="submit" name="search" value="Search" class="btn btn-primary search">
+                </div>
             </div>
-            <input type="submit" name="search" value="Search" class="btn btn-primary offset-md-3">
         </form>
     </div>
     <div class="row" id="container">
@@ -31,8 +35,8 @@
         <div class="list border">
             <div class="item-display">
                 <div class="item-display-img">
-                    <div style="bottom: 10px;position: absolute;">
-                        <img src="{{ item.image }}"  style="width:100%">
+                    <div class="item-img">
+                        <img src="{{ item.image }}">
                     </div>
                 </div>
                 <div class="item-bottom">
