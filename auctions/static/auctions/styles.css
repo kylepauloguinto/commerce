@@ -20,7 +20,7 @@ body {
 div.item-display {
     position: relative;
     width: 360px;
-    height: 600px;
+    height: 530px;
 }
 div.item-display-img {
     position: relative;
@@ -53,6 +53,7 @@ div.item-display-img {
     width: 100%;
     overflow: hidden;
     flex-wrap: nowrap;
+    padding-left: 10px;
     /*right: 15px;*/
 }
 
@@ -109,10 +110,27 @@ p {
 }
 
 .text{
-    text-overflow: ellipsis;
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5em;
+    
+    display: -webkit-box;
     white-space: normal;
     overflow: hidden;
     height: 150px;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    text-overflow: ellipsis;
+    
+    /* Optional fallback */
+    max-height: 6em; /* 3 lines × line-height */
+}
+h1, .item-info{
+    overflow: hidden;
+    white-space: normal;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
 }
 
 /* preview container */
@@ -129,16 +147,6 @@ p {
     opacity: 0;
     transition: opacity 0.3s ease, transform 0.3s ease;
     z-index: 10;
-    
-    /* position: fixed;
-    top: 0;
-    left: 0;
-    background: rgba(0,0,0,0.75);
-    justify-content: center;
-    align-items: center;
-    visibility: hidden;
-    opacity: 0;
-    z-index: 100; */
 }
 
 .item-display-img{

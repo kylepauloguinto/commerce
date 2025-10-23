@@ -47,9 +47,9 @@
                     <h1>{{ item.title }}</h1>
                     {% with item.listingId.all|first as current %}
                         {% if current.amount == None %}
-                            <p>Current price: &nbsp;<strong>No bid</strong></p>
+                            <p class="item-info">Current price: &nbsp;<strong>No bid</strong></p>
                         {% else %}
-                            <p>Current price: ¥{{ current.amount }} by 
+                            <p class="item-info">Current price: ¥{{ current.amount }} by 
                                 {% if user.id != current.bidder.id %} 
                                     {{ current.bidder }}
                                 {% else %} 
@@ -58,8 +58,8 @@
                             </p>
                         {% endif %}
                     {% endwith %}
-                    <p>Starting price: ¥{{ item.price }}</p>
-                    <p style="color: grey">Category: {{ item.category }} created by 
+                    <p class="item-info">Starting price: ¥{{ item.price }}</p>
+                    <p class="item-info" style="color: grey">Category: {{ item.category }} created by 
                         {% if user.id != item.name.id %} 
                             {{ item.name }} 
                         {% else %} 
