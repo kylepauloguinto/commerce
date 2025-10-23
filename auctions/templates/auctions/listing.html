@@ -8,8 +8,12 @@
         <div class="list border">
             <div class="item-display">
                 <div class="item-display-img">
+                    <!-- Full natural-size preview -->
                     <div class="item-img">
                         <img src="{{ item.image }}">
+                    </div>
+                    <div class="image-preview">
+                        <img src="{{ item.image }}" alt="image preview" />
                     </div>
                 </div>
                 <div class="item-bottom">
@@ -44,19 +48,23 @@
                         {% else %} 
                             You 
                         {% endif %}</p>
-                    <p>{{ item.description }}</p>
+                    <p class="text">{{ item.description }}</p>
                 </div>
-                <div class="item-bottom-right">
+                <div class="item-bottom-right row">
+                    <div>
                     <form action="{% url 'item' item.id %}" method="post" id="form1">
                         {% csrf_token %}
                         <input type="submit" value="View" class="btn btn-primary">
                     </form>
+                    </div>
                     {% if not item.closeChecker %}
+                            <div>
                             <form action="{% url 'index' %}" method="post" id="form2">
                                 {% csrf_token %}
                                 <input type="text" value="{{ item.id }}" name="item_id" hidden>
                                 <input type="submit" name="closeBid" value="Close Bid" class="btn btn-warning">
                             </form>
+                            </div>
                     {% else %}
                             <div id="form2">
                                 <input type="submit" name="closeBid" value="Closed Bid" class="btn btn-warning" disabled>

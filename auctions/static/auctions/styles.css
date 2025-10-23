@@ -10,9 +10,9 @@ body {
 
 #container > .list {
     font-size: 20px;
-    margin-left: 65px;
-    margin-top: 40px;
-    margin-bottom: 40px;
+    margin-left: 45px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     padding: 20px;
     width: 400px;
 }
@@ -29,27 +29,30 @@ div.item-display-img {
     overflow: hidden;   /* prevents image overflow */
 }
 .item-img img{
-  width: 100%;
-  height: 100%;
-  object-fit: contain;   /* fit without cropping */
-  object-position: center;
-  display: block;        /* removes inline gap */
-  background-color: #f0f0f0; /* optional, for letterbox effect */
+    width: 100%;
+    height: 100%;
+    object-fit: contain;   /* fit without cropping */
+    object-position: center;
+    display: block;        /* removes inline gap */
+    background-color: #f0f0f0; /* optional, for letterbox effect */
 }
 .caption {
     display: block;
 }
-  
+
 .item-bottom {
     position: absolute;
-    bottom: 10px;
     left: 10px;
     width: 335px;
-    height: 350px;
+    height: 300px;
+    overflow: hidden;
 }
 .item-bottom-right {
     position: absolute;
     bottom: 10px;
+    width: 100%;
+    overflow: hidden;
+    flex-wrap: nowrap;
     /*right: 15px;*/
 }
 
@@ -58,14 +61,14 @@ p {
 }
 #form1 {
     position: relative;
-    bottom: 10px;
     left: 10px;
+    margin-right: 20px;
 }
-#form2 {
+/* #form2 {
     position: absolute;
     bottom: 10px;
     left: 80px;
-}
+} */
 #form3 {
     position: absolute;
     bottom: 10px;
@@ -105,6 +108,60 @@ p {
     margin-left: 5px;
 }
 
+.text{
+    text-overflow: ellipsis;
+    white-space: normal;
+    overflow: hidden;
+    height: 150px;
+}
+
+/* preview container */
+.image-preview {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    background: rgba(170, 170, 170, 0.85);
+    border-radius: 10px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+    padding:2px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 10;
+    
+    /* position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,0.75);
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+    opacity: 0;
+    z-index: 100; */
+}
+
+.item-display-img{
+    cursor: pointer;
+}
+.item-display-img:hover .image-preview {
+    visibility: visible;
+    opacity: 1;
+    transform: translate(-50%, 0%);
+}
+.image-preview img {
+    display: block;
+    min-width: 450px;  /* responsive limit */
+    min-height: 40vh; /* responsive limit */
+    max-width: 40vw;  /* responsive limit */
+    max-height: 30vh; /* responsive limit */
+    object-fit: contain;
+    border-radius: 8px;
+    background: #ffffff;
+    /* helps with low-quality images */
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
 
 @media screen and (max-width: 1019px) {
 
@@ -127,5 +184,15 @@ p {
     }
     #container > .list {
         margin-left: 0px;
+    }
+    .image-preview img {
+        display: block;
+        max-width: 73vw;  /* responsive limit */
+        max-height: 63vh; /* responsive limit */
+        height: auto;
+        width: auto;
+        object-fit: contain;
+        border-radius: 8px;
+        background: #ffffff;
     }
 }
