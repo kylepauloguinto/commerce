@@ -35,9 +35,9 @@
     <link
       rel="stylesheet"
       type="text/css"
-      href="{% static 'auctions/styles.css' %}"
+      href="{% static 'auctions/styles.css' %}?v={{ STATIC_VERSION }}"
     />
-    <script src="{% static 'auctions/common.js' %}"></script>
+    <script src="{% static 'auctions/common.js' %}?v={{ STATIC_VERSION }}"></script>
   </head>
   <body>
     <div class="title">
