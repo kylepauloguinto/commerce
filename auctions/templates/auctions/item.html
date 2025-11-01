@@ -1,5 +1,5 @@
 {% extends "auctions/layout.html" %}
-
+{% load static %}
 {% block body %}
     {% if item.closeChecker == True and user.is_authenticated and user.id == bid.bidder.id %}
     <div class="alert alert-warning" role="alert">
@@ -19,11 +19,11 @@
             </div>
         </div>
     {% endif %}
-    <div class="row mx-auto">
-        <div class="col-sm-8 mr-5 mb-3 border">
-            <div class="row itm">
-                <div class="col my-5">
-                    <img src="{{ item.image }}" alt="{{ item.title }}" style="width: 400px;">
+    <div class="item-disp-info-row row mx-auto">
+        <div class="item-disp-info col-sm-8 mr-5 mb-3 border ">
+            <div class="row itm bid-img-div-row">
+                <div class="col my-5 bid-img-div">
+                    <img src="{{ item.image }}" alt="{{ item.title }}" class="bid-img">
                 </div>
                 <div class="col my-5 details">
                     <div class="row mb-3">
@@ -86,11 +86,11 @@
                     {% if user.is_authenticated and user.id != item.name.id and not item.closeChecker %}
                         <form action="{% url 'item' item.id %}" method="post" >
                             {% csrf_token %}
-                            <div class="row mb-3 mr-3">
+                            <div class="row mb-3 mr-3 price">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">¥</span>
                                 </div>
-                                <input type="text" name="price" class="form-control" aria-label="Amount (to the nearest dollar)" style="width: 200px;" value="{{ bidAmount }}">
+                                <input type="text" name="price" class="form-control" aria-label="Amount (to the nearest dollar)" style="width: 150px;" value="{{ bidAmount }}">
                                 <div class="input-group-append">
                                     <span class="input-group-text">円</span>
                                 </div>
@@ -108,17 +108,17 @@
             </div>
         </div>
         {% if not item.closeChecker %}
-            <div class="col border p-0 mb-5">
+            <div class="col border p-0 mb-3">
                 <div class="card-header">
-                        <h2>Add Comment</h2>
+                    <div class="comment-title">Add Comment</div>
                 </div>
                 {% if user.is_authenticated %}
                 <div class="card-body">
-                    <form action="{% url 'item' item.id %}" method="post" >
+                    <form action="{% url 'item' item.id %}" method="post" class="form">
                         {% csrf_token %}
-                        <input type="text" name="commentTitle" placeholder="Subject" style="width: 380px;" class="mb-2">
-                        <textarea name="commentDescription" placeholder="Your message" style="width: 380px; height:150px;"></textarea>
-                        <input type="submit" name="comment" class="btn btn-primary" value="Save">
+                        <input type="text" name="commentTitle" placeholder="Subject" class="mb-2 input">
+                        <textarea name="commentDescription" placeholder="Your message" ></textarea>
+                        <input type="submit" name="comment" class="btn btn-primary button" value="Save">
                     </form>
                 </div>
                 {% endif %}
@@ -157,4 +157,9 @@
         </div>
     </div>
 
+    <link
+    rel="stylesheet"
+    type="text/css"
+    href="{% static 'auctions/item.css' %}?v={{ STATIC_VERSION }}"
+    />
 {% endblock %}

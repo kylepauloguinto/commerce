@@ -135,4 +135,4 @@ STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesSto
 #     os.path.join(BASE_DIR, 'static'),
 # ]
 
-STATIC_VERSION = '1.0.0'
+STATIC_VERSION = '1.0.1'

@@ -1,13 +1,9 @@
 {% extends "auctions/layout.html" %}
-
+{% load static %}
 {% block body %}
-
-
     {% if message %}
-    <div class="row">
-        <div class="col-4" >
-        </div>
-        <div class="col-4" >
+    <div class="container" style="margin-top: 20px">
+        <div>
             <div class="alert alert-success" role="alert">
                 <ul>
                     {% for msg in message %}
@@ -18,41 +14,29 @@
                 </ul>
             </div>
         </div>
-        <div class="col-4" >
-        </div>
     </div>
     {% endif %}
-    <div class="row">
-        <div class="col-4" >
-        </div>
-        <div class="col-4" >
-            <center><h2>Register</h2></center>
-            <form action="{% url 'register' %}" method="post">
+    <div class="container">
+        <div class="hero" >
+            <form action="{% url 'register' %}" method="post" class="form">
+                <div class="logo">Register</div>
                 {% csrf_token %}
-                <div class="form-group">
-                    <input class="form-control" autofocus type="text" name="username" placeholder="Username" value="{{ username }}">
-                </div>
-                <div class="form-group">
-                    <input class="form-control" type="email" name="email" placeholder="Email Address" value="{{ email }}">
-                </div>
-                <div class="form-group">
-                    <input class="form-control" autofocus type="text" name="firstname" placeholder="First Name" value="{{ firstname }}">
-                </div>
-                <div class="form-group">
-                    <input class="form-control" autofocus type="text" name="lastname" placeholder="Last Name" value="{{ lastname }}">
-                </div>
-                <div class="form-group">
-                    <input class="form-control" type="password" name="password" placeholder="Password">
-                </div>
-                <div class="form-group">
-                    <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
-                </div>
-                <input class="btn btn-primary" type="submit" value="Register">
+                <input class="input" autofocus type="text" name="username" placeholder="Username" value="{{ username }}">
+                <input class="input" type="email" name="email" placeholder="Email Address" value="{{ email }}">
+                <input class="input" autofocus type="text" name="firstname" placeholder="First Name" value="{{ firstname }}">
+                <input class="input" autofocus type="text" name="lastname" placeholder="Last Name" value="{{ lastname }}">
+                <input class="input" type="password" name="password" placeholder="Password">
+                <input class="input" type="password" name="confirmation" placeholder="Confirm Password">
+                <input class="input submit" type="submit" value="Register">
+                <p class="signup">Already have an account? <a href="{% url 'login' %}">Log In here.</a>
             </form>
         
-            Already have an account? <a href="{% url 'login' %}">Log In here.</a>
-        </div>
-        <div class="col-4" >
         </div>
     </div>
+
+    <link
+    rel="stylesheet"
+    type="text/css"
+    href="{% static 'auctions/login.css' %}?v={{ STATIC_VERSION }}"
+    />
 {% endblock %}

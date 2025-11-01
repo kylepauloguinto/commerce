@@ -1,33 +1,23 @@
 {% extends "auctions/layout.html" %}
-
+{% load static %}
 {% block body %}
-
-<div class="container">
     {% if message %}
-        <div class="row">
-            <div class="col-3" >
-            </div>
-            <div class="col-6" >
-                <div class="alert alert-success" role="alert">
-                    <ul>
-                        {% for msg in message %}
-                            <li>
-                                <p>{{ msg }}</p>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-            <div class="col-3" >
-            </div>
+    <div class="container">
+        <div class="alert alert-success" role="alert">
+            <ul>
+                {% for msg in message %}
+                    <li>
+                        <p>{{ msg }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
+    </div>
     {% endif %}
-    <div class="row">
-        <div class="col-3">
-        </div>
-        <div class="col-6">
-            <center><h2>Add Item</h2></center>
-            <form action="{% url 'create' %}" method="post">
+    <div class="container">
+        <div class="hero">
+            <form action="{% url 'create' %}" method="post" >
+                <div class="logo">Add Item</div>
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="title">Title (required) Maximum of 64 characters</label>
@@ -60,17 +50,20 @@
                 </div>
                 <div class="form-group">
                     <label for="price">Description (required), maximum 900 characters</label>
-                    <textarea name="description" class="form-control"  id="description" placeholder="Description (Required)" style="width: 540px; height:150px;" required>{{ description }}</textarea>
+                    <textarea name="description" class="form-control"  id="description" placeholder="Description (Required)" style="width: 100%; height:150px;" required>{{ description }}</textarea>
                 </div>
                 <div class="form-group">
-                    <label for="image">Image url (optional)</label>
-                    <input type="text" name="image" class="form-control"  id="image" placeholder="Image Url (Optional)"  value="{{ img }}" >
+                    <label for="image">Image url (required)</label>
+                    <input type="text" name="image" class="form-control"  id="image" placeholder="Image Url (required)"  value="{{ img }}" required>
                 </div>
                 <input type="submit" value="Submit" class="btn btn-primary">
             </form>
         </div>
-        <div class="col-3">
-        </div>
     </div>
-</div>
+
+<link
+rel="stylesheet"
+type="text/css"
+href="{% static 'auctions/create.css' %}?v={{ STATIC_VERSION }}"
+/>
 {% endblock %}

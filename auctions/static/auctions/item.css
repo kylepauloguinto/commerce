@@ -1,0 +1,91 @@
+.form {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+.card-body{
+  height: 80%;
+}
+.card-header>.comment-title {
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -1px;
+  line-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form input {
+  outline: 0;
+  border: 1px solid rgb(219, 213, 213);
+  padding: 8px 14px;
+  border-radius: 8px;
+  width: 100%;
+  height: 50px;
+}
+
+.form textarea {
+  border-radius: 8px;
+  height: 100%;
+  width: 100%;
+  resize: none;
+  outline: 0;
+  padding: 8px 14px;
+  border: 1px solid rgb(219, 213, 213);
+}
+
+.form >.button {
+  align-self: flex-end;
+  padding: 8px;
+  outline: 0;
+  border: 0;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+}
+
+.col-sm-8{
+  background-color: white;
+}
+.bid-img{
+  max-width: 800px;
+}
+@media screen and (max-width: 2090px) {
+  .bid-img{
+    max-width: 500px;
+  }
+}
+@media screen and (max-width: 1430px) {
+  .item-disp-info-row{
+    display: block !important;
+  }
+  .item-disp-info{
+    max-width: 100% !important;
+  }
+}
+@media screen and (max-width: 600px) {
+  .bid-img{
+    max-width: 300px;
+  }
+}
+
+@media screen and (max-width: 915px) {
+  .bid-img-div-row{
+    display: block !important;
+  }
+  .bid-img-div{
+    display: flex;
+    justify-content: center;
+    max-width: 100% !important;
+  }
+}

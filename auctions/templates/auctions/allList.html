@@ -5,7 +5,7 @@
     <div class="searchSection">
         <form action="{% url 'allList' %}" method="post" class="form-inline ">
             {% csrf_token %}
-            <div class="row">
+            <div class="search-section">
                 <div class="form-group mx-sm-3 select">
                     <select name="category" class="custom-select" id="category">
                         <option value="" >All category</option>
