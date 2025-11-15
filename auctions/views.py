@@ -154,8 +154,9 @@ def register(request):
             user.last_name = lastname
             user.save()
         except IntegrityError:
+            messageList.append("Username already taken.")
             return render(request, "auctions/register.html", {
-                "message": "Username already taken."
+                "message": messageList
             })
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
